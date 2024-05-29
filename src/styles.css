@@ -92,6 +92,21 @@ main {
   top: -38px;
 }
 
+.weather-forecast {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 30px;
+  text-align: center;
+}
+
+.forecast-date {
+  color: rgba(0, 0, 0, 0.526);
+}
+
+.forecast-temps {
+  color: #e67383;
+  padding: 0 7px;
+}
 footer {
   border-top: 1px solid #ffcdc563;
   text-align: center;
