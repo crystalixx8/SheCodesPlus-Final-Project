@@ -40,7 +40,7 @@ function updateWeather(response) {
   humidityElement.innerHTML = `${response.data.temperature.humidity}%`;
   windSpeedElement.innerHTML = `${response.data.wind.speed}km/h`;
   iconElement.innerHTML = `<img src ="${response.data.condition.icon_url}"/>`;
-  timeElement.innerHTML = formatDateAndTime(date)
+  timeElement.innerHTML = formatDateAndTime(date);
 }
 
 function searchCity(city) {
@@ -57,7 +57,35 @@ function searchSubmit(event) {
   searchCity(searchInputElement.value);
 }
 
+function displayForecast() {
+  let forecast = document.querySelector("#forecast");
+
+  let days = ["Tue", "Wed", "Thu", "Fri", "Sat"];
+  let forecastHTML = "";
+
+  days.forEach(function (day) {
+    forecastHTML += `
+      <div class="forecast-day">
+            <div class="forecast-date">${day}</div>
+            <div class="forecast-icon">
+              <img
+                src="http://shecodes-assets.s3.amazonaws.com/api/weather/icons/rain-day.png"
+              />
+            </div>
+            <span class="forecast-temps">
+              <b>22º</b>
+            </span>
+            <span class="forecast-temps">10º</span>
+          </div>
+          `;
+  });
+
+  let forecastElement = document.querySelector("#forecast");
+  forecastElement.innerHTML = forecastHTML;
+}
+
 let searchButton = document.querySelector("form");
 searchButton.addEventListener("submit", searchSubmit);
 
 searchCity("Sydney");
+displayForecast();
