@@ -41,6 +41,9 @@ function updateWeather(response) {
   windSpeedElement.innerHTML = `${response.data.wind.speed}km/h`;
   iconElement.innerHTML = `<img src ="${response.data.condition.icon_url}"/>`;
   timeElement.innerHTML = formatDateAndTime(date);
+
+  getForecast(response.data.city);
+
 }
 
 function searchCity(city) {
@@ -57,27 +60,41 @@ function searchSubmit(event) {
   searchCity(searchInputElement.value);
 }
 
-function displayForecast() {
-  let forecast = document.querySelector("#forecast");
+function formatDay(time){
+  let date = new Date(time * 1000);
+  let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-  let days = ["Tue", "Wed", "Thu", "Fri", "Sat"];
+  return days[date.getDay()];
+}
+
+function getForecast(city) {
+  let key = "08dcad5234e0828f84o97f5ct047b8d4";
+  let apiURL = `https://api.shecodes.io/weather/v1/forecast?query=${city}&key=${key}`;
+
+  axios(apiURL).then(displayForecast);
+}
+
+function displayForecast(response) {
+  console.log(response.data)
   let forecastHTML = "";
 
-  days.forEach(function (day) {
+  response.data.daily.forEach(function (day, index) {
+    if (index < 5) {
     forecastHTML += `
       <div class="forecast-day">
-            <div class="forecast-date">${day}</div>
+            <div class="forecast-date">${formatDay(day.time)}</div>
             <div class="forecast-icon">
               <img
-                src="http://shecodes-assets.s3.amazonaws.com/api/weather/icons/rain-day.png"
+                src="${day.condition.icon_url}"
               />
             </div>
             <span class="forecast-temps">
-              <b>22º</b>
+              <strong>${Math.round(day.temperature.maximum)}º</strong>
             </span>
-            <span class="forecast-temps">10º</span>
+            <span class="forecast-temps">${Math.round(day.temperature.minimum)}º</span>
           </div>
           `;
+    }
   });
 
   let forecastElement = document.querySelector("#forecast");
@@ -88,4 +105,3 @@ let searchButton = document.querySelector("form");
 searchButton.addEventListener("submit", searchSubmit);
 
 searchCity("Sydney");
-displayForecast();
